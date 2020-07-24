@@ -1,4 +1,5 @@
 from django.db import models
+
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
@@ -6,13 +7,13 @@ from django.contrib.auth.models import BaseUserManager
 # Create your models here.
 
 class UserProfileManager(BaseUserManager):
-#"""" Respents a "user profile" inside our system."""
+    """Helps Django work with our custom user model."""
 
     def create_user(self, email, name, password=None):
-        #"""creates a new user profile object."""
+        """Creates a new user profile object."""
 
         if not email:
-            raise ValueError("Users must have an email address.")
+            raise ValueError('Users must have an email address.')
 
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
@@ -22,21 +23,22 @@ class UserProfileManager(BaseUserManager):
 
         return user
 
-        def cerate_superuser(self, email, password):
-            #"""creates and saves a new superuser with given details."""
+    def create_superuser(self, email, name, password):
+        """Creates and saves a new superuser with given details"""
 
-            user = self.create_user(email, name, password)
+        user = self.create_user(email, name, password)
 
-            user.is_superuser = true
-            usre.is_staff = true
+        user.is_superuser = True
+        user.is_staff = True
 
-            user.save(using=self._db)
+        user.save(using=self._db)
 
-            return user
+        return user
+
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
-    # """Respents a "User Profile" inside our system."""
+    """Represents a "user profile" inside our system."""
 
     email = models.EmailField(max_length=255, unique=True)
     name = models.CharField(max_length=255)
@@ -45,20 +47,20 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     objects = UserProfileManager()
 
-    USERNAME_FIELD = "email"
-    REWUIRED_FIELDS = ["name"]
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
 
     def get_full_name(self):
-    #    """Used to get a users full name."""
+        """Used to get a users full name."""
 
         return self.name
 
     def get_short_name(self):
-        # Used to get a users get_short_name.
+        """Used to get a users short name."""
 
         return self.name
 
-    def _str_(self):
-     # Django uses this when it needs to convert the objects to a string
+    def __str__(self):
+        """Django uses this when it needs to convert the object into a string."""
 
-     return self.email
+        return self.email
