@@ -1,13 +1,13 @@
-from rest_framework import PermissionsMixin
+from rest_framework import permissions
 
 
-class updateOwnProfile(permissions.BasePermissions):
+class UpdateOwnProfile(permissions.BasePermission):
     """Allow users to edit ther own profile."""
 
-    def has_objects_permissions(self, request, view, obj):
+    def has_objects_permission(self, request, view, obj):
         """Check user is trying to edit ther own profile."""
 
-    if request.method in permissions.SAFE_METHODS:
-        return True
+        if request.method in permissions.SAFE_METHODS:
+            return True
 
-    return obj.id == request.user.id   
+        return obj.id == request.user.id
