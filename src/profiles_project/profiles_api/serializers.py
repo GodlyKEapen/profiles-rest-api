@@ -4,13 +4,13 @@ from . import models
 
 
 class HelloSerializer(serializers.Serializer):
-    """Serializers a name field for testing our APIView."""
+    """Serializes a name field for testing our APIView."""
 
     name = serializers.CharField(max_length=10)
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """A serializer for our user profile objects."""
+    """ A serializer for our user profile objects."""
 
     class Meta:
         model = models.UserProfile
@@ -29,3 +29,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class ProfileFeedItemSerializer(serializers.ModelSerializer):
+    """ a serializer for profile feed item."""
+
+    class Meta:
+        model = models.ProfileFeedItem
+        fields = ('id', 'user_profile', 'status_text', 'created_on')
+        extra_kwargs = {'user_profile': {'read_only':True}}

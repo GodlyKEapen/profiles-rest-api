@@ -1,5 +1,4 @@
 from django.db import models
-
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
@@ -10,7 +9,7 @@ class UserProfileManager(BaseUserManager):
     """Helps Django work with our custom user model."""
 
     def create_user(self, email, name, password=None):
-        """Creates a new user profile object."""
+        """Create a new user profile object."""
 
         if not email:
             raise ValueError('Users must have an email address.')
@@ -24,7 +23,7 @@ class UserProfileManager(BaseUserManager):
         return user
 
     def create_superuser(self, email, name, password):
-        """Creates and saves a new superuser with given details"""
+        """Creates and saves a new superuser with given deatils."""
 
         user = self.create_user(email, name, password)
 
@@ -34,7 +33,6 @@ class UserProfileManager(BaseUserManager):
         user.save(using=self._db)
 
         return user
-
 
 
 class UserProfile(AbstractBaseUser, PermissionsMixin):
@@ -60,19 +58,20 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
         return self.name
 
-    def __str__(self):
-        """Django uses this when it needs to convert the object into a string."""
+    def _str_(self):
+        """Django uses this when it needs to convert the object to a string"""
 
         return self.email
+
 
 class ProfileFeedItem(models.Model):
     """Profile status update."""
 
     user_profile = models.ForeignKey('UserProfile', on_delete=models.CASCADE)
-    status_test = models.CharField(max_length=225)
+    status_text = models.CharField(max_length=255)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         """Return the model as a string."""
 
-        return self.status_test
+        return self.status_text
